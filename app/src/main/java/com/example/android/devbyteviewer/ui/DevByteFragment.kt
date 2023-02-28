@@ -53,7 +53,7 @@ class DevByteFragment : Fragment() {
         }
         //The ViewModelProviders (plural) is deprecated.  
         //ViewModelProviders.of(this, DevByteViewModel.Factory(activity.application)).get(DevByteViewModel::class.java)
-        ViewModelProvider(this, DevByteViewModel.Factory(activity.application)).get(DevByteViewModel::class.java)
+        ViewModelProvider(this, DevByteViewModel.Factory(activity.application))[DevByteViewModel::class.java]
                 
     }
 
