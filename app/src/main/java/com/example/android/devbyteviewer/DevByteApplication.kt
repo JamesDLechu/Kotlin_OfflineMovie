@@ -66,7 +66,7 @@ class DevByteApplication : Application() {
             .setConstraints(constraints)
             .build()
 
-        WorkManager.getInstance(applicationContext!!).enqueueUniquePeriodicWork(
+        WorkManager.getInstance(applicationContext).enqueueUniquePeriodicWork(
             RefreshDataWorker.WORK_NAME,
             ExistingPeriodicWorkPolicy.KEEP,
             repeatingRequest
