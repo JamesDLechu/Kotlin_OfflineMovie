@@ -19,11 +19,16 @@ package com.example.android.devbyteviewer.work
 
 import android.app.Application
 import android.content.Context
+import android.util.Log
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.example.android.devbyteviewer.database.getDatabase
 import com.example.android.devbyteviewer.repository.VideosRepository
+import com.example.android.devbyteviewer.util.makeStatusNotification
 import retrofit2.HttpException
+import timber.log.Timber
+import java.text.SimpleDateFormat
+import java.util.*
 
 class RefreshDataWorker(appContext: Context, params: WorkerParameters):
         CoroutineWorker(appContext, params){
@@ -33,13 +38,20 @@ class RefreshDataWorker(appContext: Context, params: WorkerParameters):
     }
 
     override suspend fun doWork(): Result {
-        val database= getDatabase(applicationContext)
-        val repository= VideosRepository(database)
+        Timber.i("Entra al worker")
+        val database = getDatabase(applicationContext)
+        val repository = VideosRepository(database)
+
+        val formatter = SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault())
+        val calendar = Calendar.getInstance()
+        val actualDay = formatter.format(calendar.time)
 
         return try {
             repository.refreshVideos()
+            makeStatusNotification("Actualizando datos: $actualDay", applicationContext)
             Result.success()
-        }catch (e: HttpException){
+        } catch (e: HttpException) {
+            Timber.i("Reintentando")
             Result.retry()
         }
     }

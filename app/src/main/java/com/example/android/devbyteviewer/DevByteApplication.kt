@@ -58,17 +58,19 @@ class DevByteApplication : Application() {
             .setRequiresBatteryNotLow(true)
             .setRequiresCharging(true)
             .apply {
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-                    setRequiresDeviceIdle(true)
+                //if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+                    //setRequiresDeviceIdle(true)
             }.build()
 
         val repeatingRequest= PeriodicWorkRequestBuilder<RefreshDataWorker>(1, TimeUnit.DAYS)
             .setConstraints(constraints)
             .build()
 
+        Timber.i("Instanciando...")
+
         WorkManager.getInstance(applicationContext).enqueueUniquePeriodicWork(
             RefreshDataWorker.WORK_NAME,
-            ExistingPeriodicWorkPolicy.KEEP,
+            ExistingPeriodicWorkPolicy.CANCEL_AND_REENQUEUE,
             repeatingRequest
         )
     }
