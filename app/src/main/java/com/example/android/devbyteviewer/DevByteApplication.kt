@@ -58,8 +58,8 @@ class DevByteApplication : Application() {
             .setRequiresBatteryNotLow(true)
             .setRequiresCharging(true)
             .apply {
-                //if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-                    //setRequiresDeviceIdle(true)
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+                    setRequiresDeviceIdle(true)
             }.build()
 
         val repeatingRequest= PeriodicWorkRequestBuilder<RefreshDataWorker>(1, TimeUnit.DAYS)
